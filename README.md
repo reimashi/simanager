@@ -1,2 +1,2 @@
-# simanager
-Aplicación de administración para la asignatura Sistemas de Información
+# SI (Sistemas de Información) Example Project - Persistence Layer
+
