@@ -15,7 +15,7 @@ public class Alerts {
 	private int temperature_low;
 	private int rain_high;
 	private int rain_half;
-	private int rain_low
+	private int rain_low;
 
 	public int getId() {
 		return id;
