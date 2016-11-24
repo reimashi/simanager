@@ -1,2 +1,2 @@
-# SI (Sistemas de Información) Example Project - Persistence Layer
+# SI (Sistemas de Información) - Administrador del data warehouse
 

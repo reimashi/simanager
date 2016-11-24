@@ -1,24 +1,21 @@
 package weathercool.proyectosi;
 
-import static org.junit.Assert.assertEquals;
-import static weathercool.proyectosi.TransactionUtils.doTransaction;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import weathercool.proyectosi.Employee;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 
-public class EmployeeTest extends SQLBasedTest {
+import static org.junit.Assert.assertEquals;
+import static weathercool.proyectosi.TransactionUtils.doTransaction;
+
+public class UserTest extends SQLBasedTest {
 	private static EntityManagerFactory emf;
 	
 	@BeforeClass
@@ -38,8 +35,8 @@ public class EmployeeTest extends SQLBasedTest {
 	
 	//C
 	@Test
-	public void testCreateEmployee() throws SQLException {
-		final Employee emp = new Employee();
+	public void testCreateUser() throws SQLException {
+		final User emp = new User();
 		
 		doTransaction(emf, em -> {
 				emp.setName("Daniel");
@@ -49,7 +46,7 @@ public class EmployeeTest extends SQLBasedTest {
 		//check
 		Statement statement = jdbcConnection.createStatement();
 		ResultSet rs = statement.executeQuery(
-				"SELECT COUNT(*) as total FROM Employee WHERE id = "+emp.getId());
+				"SELECT COUNT(*) as total FROM User WHERE id = "+emp.getId());
 		rs.next();
 		
 		assertEquals(1, rs.getInt("total"));
@@ -61,40 +58,40 @@ public class EmployeeTest extends SQLBasedTest {
 		//prepare database for test
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO Employee(name) values('Daniela')", 
+				"INSERT INTO User(name) values('Daniela')",
 				Statement.RETURN_GENERATED_KEYS);
 		
 		int id = getLastInsertedId(statement);
 		
 		//test code
-		Employee e = emf.createEntityManager().find(Employee.class, id);
+		User e = emf.createEntityManager().find(User.class, id);
 		
 		//assert code
-		System.out.println("employee of id "+id+" is: "+e);
+		System.out.println("User of id "+id+" is: "+e);
 		assertEquals("Daniela", e.getName());
 		assertEquals(id, e.getId());
 	}
 	
 	//U
 	@Test
-	public void testUpdateEmployee() throws SQLException {
+	public void testUpdateUser() throws SQLException {
 		//prepare database for test
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-					"INSERT INTO Employee(name) values('Daniel')", 
+					"INSERT INTO User(name) values('Daniel')",
 					Statement.RETURN_GENERATED_KEYS);
 		
 		int id = getLastInsertedId(statement);
 		
 		doTransaction(emf, em -> {
-			Employee e = em.find(Employee.class, id);
+			User e = em.find(User.class, id);
 			e.setName("Daniel Glez");
 		});
 		
 		//check
 		statement = jdbcConnection.createStatement();
 		ResultSet rs = statement.executeQuery(
-				"SELECT * FROM Employee WHERE id = "+id);
+				"SELECT * FROM User WHERE id = "+id);
 		rs.next();
 		
 		assertEquals("Daniel Glez", rs.getString("name"));
@@ -103,31 +100,31 @@ public class EmployeeTest extends SQLBasedTest {
 	}
 	
 	//U
-	private Employee aDetachedEmployee = null;
+	private User aDetachedUser = null;
 	@Test
 	public void testUpdateByMerge() throws SQLException {
 		//prepare database for test
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-					"INSERT INTO Employee(name) values('Daniel')", 
+					"INSERT INTO User(name) values('Daniel')",
 					Statement.RETURN_GENERATED_KEYS);
 		int id = getLastInsertedId(statement);
 		
 		doTransaction(emf, em -> {
-			aDetachedEmployee = em.find(Employee.class, id);
+			aDetachedUser = em.find(User.class, id);
 		});
 		// e is detached, because the entitymanager em is closed (see doTransaction)
 		
-		aDetachedEmployee.setName("Daniel Glez");
+		aDetachedUser.setName("Daniel Glez");
 		
 		doTransaction(emf, em -> {
-			em.merge(aDetachedEmployee);
+			em.merge(aDetachedUser);
 		});
 		
 		//check
 		statement = jdbcConnection.createStatement();
 		ResultSet rs = statement.executeQuery(
-				"SELECT * FROM Employee WHERE id = "+id);
+				"SELECT * FROM User WHERE id = "+id);
 		rs.next();
 		
 		assertEquals("Daniel Glez", rs.getString("name"));
@@ -136,23 +133,23 @@ public class EmployeeTest extends SQLBasedTest {
 	
 	//D
 	@Test
-	public void testDeleteEmployee() throws SQLException {
+	public void testDeleteUser() throws SQLException {
 		//prepare database for test
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-					"INSERT INTO Employee(name) values('Daniel')", 
+					"INSERT INTO User(name) values('Daniel')",
 					Statement.RETURN_GENERATED_KEYS);
 		int id = getLastInsertedId(statement);
 		
 		doTransaction(emf, em -> {
-			Employee e = em.find(Employee.class, id);
+			User e = em.find(User.class, id);
 			em.remove(e);
 		});
 		
 		//check
 		statement = jdbcConnection.createStatement();
 		ResultSet rs = statement.executeQuery(
-				"SELECT COUNT(*) as total FROM Employee WHERE id = "+id);
+				"SELECT COUNT(*) as total FROM User WHERE id = "+id);
 		rs.next();
 		
 		assertEquals(0, rs.getInt("total"));
@@ -160,25 +157,25 @@ public class EmployeeTest extends SQLBasedTest {
 	
 	//L
 	@Test
-	public void testListEmployee() throws SQLException {
+	public void testListUser() throws SQLException {
 		//prepare database for test
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-					"INSERT INTO Employee(name) values('Daniel')", 
+					"INSERT INTO User(name) values('Daniel')",
 					Statement.RETURN_GENERATED_KEYS);
 		//prepare database for test
 		statement.executeUpdate(
-					"INSERT INTO Employee(name) values('Pepe')", 
+					"INSERT INTO User(name) values('Pepe')",
 					Statement.RETURN_GENERATED_KEYS);
 		
-		List<Employee> employees = emf.createEntityManager()
-			.createQuery("SELECT e FROM Employee e ORDER BY e.name", Employee.class)
+		List<User> users = emf.createEntityManager()
+			.createQuery("SELECT e FROM User e ORDER BY e.name", User.class)
 			.getResultList();
 		
 		//check
-		assertEquals(2, employees.size());
-		assertEquals("Daniel", employees.get(0).getName());
-		assertEquals("Pepe", employees.get(1).getName());
+		assertEquals(2, users.size());
+		assertEquals("Daniel", users.get(0).getName());
+		assertEquals("Pepe", users.get(1).getName());
 	}
 	
 }

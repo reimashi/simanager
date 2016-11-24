@@ -1,21 +1,19 @@
 package weathercool.proyectosi;
 
-import static org.junit.Assert.assertEquals;
-import static weathercool.proyectosi.TransactionUtils.doTransaction;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import weathercool.proyectosi.location;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static weathercool.proyectosi.TransactionUtils.doTransaction;
 
 public class LocationTest extends SQLBasedTest {
 	private static EntityManagerFactory emf;
@@ -38,7 +36,7 @@ public class LocationTest extends SQLBasedTest {
 
 	@Test
 	public void testCreateLocation() throws SQLException {
-		final location loc = new location();
+		final Location loc = new Location();
 
 		doTransaction(emf, lo -> {
 			loc.setLatitude(9.45);
@@ -63,10 +61,10 @@ public class LocationTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		// test code
-		location lo = emf.createEntityManager().find(location.class, id);
+		Location lo = emf.createEntityManager().find(Location.class, id);
 
 		// assert code
-		System.out.println("location of id " + id + " is: " + lo);
+		System.out.println("Location of id " + id + " is: " + lo);
 		assertEquals(94.132, lo.getLatitude(), 1e-10);
 		assertEquals(45.189, lo.getLongitude(), 1e-10);
 		assertEquals(id, lo.getId());
@@ -82,7 +80,7 @@ public class LocationTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, lo -> {
-			location l = lo.find(location.class, id);
+			Location l = lo.find(Location.class, id);
 			l.setLatitude(-6.132);
 			l.setLongitude(-5.198);
 		});
@@ -97,7 +95,7 @@ public class LocationTest extends SQLBasedTest {
 		assertEquals(id, rs.getInt("id"));
 	}
 
-	private location aDetachedLocation = null;
+	private Location aDetachedLocation = null;
 
 	@Test
 	public void testUpdateLocationByMerge() throws SQLException {
@@ -108,7 +106,7 @@ public class LocationTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, lo -> {
-			aDetachedLocation = lo.find(location.class, id);
+			aDetachedLocation = lo.find(Location.class, id);
 		});
 		// e is detached, because the entitymanager lo is closed (see
 		// doTransaction)
@@ -138,7 +136,7 @@ public class LocationTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, lo -> {
-			location l = lo.find(location.class, id);
+			Location l = lo.find(Location.class, id);
 			lo.remove(l);
 		});
 
@@ -160,14 +158,14 @@ public class LocationTest extends SQLBasedTest {
 		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(8.456, 1.288)",
 				Statement.RETURN_GENERATED_KEYS);
 
-		List<location> locations = emf.createEntityManager()
-				.createQuery("SELECT l FROM location l ORDER BY l.id", location.class).getResultList();
+		List<Location> Locations = emf.createEntityManager()
+				.createQuery("SELECT l FROM location l ORDER BY l.id", Location.class).getResultList();
 
 		// check
-		assertEquals(2, locations.size());
-		assertEquals(4.524, locations.get(0).getLatitude(), 1e-10);
-		assertEquals(7.785, locations.get(0).getLongitude(), 1e-10);
-		assertEquals(8.456, locations.get(1).getLatitude(), 1e-10);
-		assertEquals(1.288, locations.get(1).getLongitude(), 1e-10);
+		assertEquals(2, Locations.size());
+		assertEquals(4.524, Locations.get(0).getLatitude(), 1e-10);
+		assertEquals(7.785, Locations.get(0).getLongitude(), 1e-10);
+		assertEquals(8.456, Locations.get(1).getLatitude(), 1e-10);
+		assertEquals(1.288, Locations.get(1).getLongitude(), 1e-10);
 	}
 }
