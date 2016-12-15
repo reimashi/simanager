@@ -1,3 +1,5 @@
+package weathercool.proyectosi;
+
 import static org.junit.Assert.*;
 
 import java.sql.SQLException;
@@ -36,13 +38,15 @@ public class MeasurementTest extends SQLBasedTest {
 		statement.executeUpdate(
 				"INSERT INTO Alert(temperature_high) values(20)", 
 				Statement.RETURN_GENERATED_KEYS);
+
 		int alertId = getLastInsertedId(statement);
 		
 		statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
 				"INSERT INTO time(year, month, day, hour, minute, second) values(2016, 11, 20, 17, 55, 38)", 
 				Statement.RETURN_GENERATED_KEYS);
-		int alertId = getLastInsertedId(statement);
+
+		int timeId = getLastInsertedId(statement);
 		
 		statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
@@ -59,6 +63,6 @@ public class MeasurementTest extends SQLBasedTest {
 		
 		//check
 		assertEquals(1, measures.size());
-		assertEquals("20", measures.get(0).getName());
+		assertEquals("20", measures.get(0).getTemperatureSurface());
 	}
 }

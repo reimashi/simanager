@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Measurement {
 	@Id
 	@ManyToOne
-	private Alerts alert;
+	private Alert alert;
 	
 	@Id
 	@ManyToOne
@@ -56,7 +56,7 @@ public class Measurement {
 	}
 
 	public double getTemperatureSurface() {
-		return temperature_half;
+		return temperature_surface;
 	}
 	public double getTemperature500mb() {
 		return temperature_500mb;
@@ -98,19 +98,19 @@ public class Measurement {
 	}
 	
 	public double getWaterDirectionMean() {
-		return water_direction_mean;
+		return wave_direction_mean;
 	}
 	
 	public double getWaterDirectionPeak() {
-		return water_direction_peak;
+		return wave_direction_peak;
 	}
 	
 	public double getWaterPeriodAbsolute() {
-		return water_period_absolute;
+		return wave_period_absolute;
 	}
 	
 	public double getWaterPeriodPeak() {
-		return water_period_peak;
+		return wave_period_peak;
 	}
 	
 	public double getSnowLevel() {
@@ -146,7 +146,7 @@ public class Measurement {
 	}
 
 	public void setTemperatureSurface(double temperature_half) {
-		this.temperature_half=temperature_half;
+		this.temperature_surface=temperature_half;
 	}
 	public void setTemperature500mb(double temperature_500mb) {
 		this.temperature_500mb=temperature_500mb;
@@ -188,19 +188,19 @@ public class Measurement {
 	}
 	
 	public void setWaterDirectionMean(double water_direction_mean) {
-		this.water_direction_mean= water_direction_mean;
+		this.wave_direction_mean= water_direction_mean;
 	}
 	
 	public void setWaterDirectionPeak(double water_direction_peak) {
-		this.water_direction_peak=water_direction_peak;
+		this.wave_direction_peak=water_direction_peak;
 	}
 	
 	public void setWaterPeriodAbsolute(double water_period_absolute) {
-		this.water_period_absolute=water_period_absolute;
+		this.wave_period_absolute=water_period_absolute;
 	}
 	
 	public void setWaterPeriodPeak(double water_period_peak) {
-		this.water_period_peak=water_period_peak;
+		this.wave_period_peak=water_period_peak;
 	}
 	
 	public void setSnowLevel(double snow_level) {

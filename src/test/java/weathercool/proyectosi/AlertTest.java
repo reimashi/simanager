@@ -10,12 +10,11 @@ import javax.persistence.Persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static weathercool.proyectosi.TransactionUtils.doTransaction;
 
-public class AlertsTest extends SQLBasedTest {
+public class AlertTest extends SQLBasedTest {
 	private static EntityManagerFactory emf;
 
 	@BeforeClass
@@ -49,7 +48,7 @@ public class AlertsTest extends SQLBasedTest {
 		});
 		// check
 		Statement statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT COUNT(*) AS Total FROM Alerts WHERE id = " + al.getId());
+		ResultSet rs = statement.executeQuery("SELECT COUNT(*) AS Total FROM Alert WHERE id = " + al.getId());
 		rs.next();
 
 		assertEquals(1, rs.getInt("total"));
@@ -65,7 +64,7 @@ public class AlertsTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		// test code
-		Alerts al = emf.createEntityManager().find(Alerts.class, id);
+		Alert al = emf.createEntityManager().find(Alert.class, id);
 
 		// assert code
 		
@@ -88,7 +87,7 @@ public class AlertsTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, a -> {
-			Alerts al = a.find(Alerts.class, id);
+			Alert al = a.find(Alert.class, id);
 			al.setTemperatureHigh(15);
 			al.setTemperatureHalf(25);
 			al.setTemperatureLow(27);
@@ -103,16 +102,16 @@ public class AlertsTest extends SQLBasedTest {
 		ResultSet rs = statement.executeQuery("SELECT * FROM alerts WHERE id = " + id);
 		rs.next();
 
-		assertEquals(15, al.getTemperatureHigh());
-		assertEquals(25, al.getTemperatureHalf());
-		assertEquals(27, al.getTemperatureLow());
-		assertEquals(30, al.getRainHigh());
-		assertEquals(1, al.getRainHalf());
-		assertEquals(23, al.getRainLow());;
-		assertEquals(id, al.getInt("id"));
+		assertEquals(15, rs.getInt("temperature_high"));
+		assertEquals(25, rs.getInt("temperature_half"));
+		assertEquals(27, rs.getInt("temperature_low"));
+		assertEquals(30, rs.getInt("rain_high"));
+		assertEquals(1, rs.getInt("rain_half"));
+		assertEquals(23, rs.getInt("rain_low"));;
+		assertEquals(id, rs.getInt("id"));
 	}
 
-	private Alerts aDetachedAlert = null;
+	private Alert aDetachedAlert = null;
 
 	@Test
 	public void testUpdateTimeByMerge() throws SQLException {
@@ -123,7 +122,7 @@ public class AlertsTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, a -> {
-			aDetachedAlert = a.find(Alerts.class, id);
+			aDetachedAlert = a.find(Alert.class, id);
 		});
 		// e is detached, because the entitymanager lo is closed (see
 		// doTransaction)
@@ -144,12 +143,12 @@ public class AlertsTest extends SQLBasedTest {
 		ResultSet rs = statement.executeQuery("SELECT * FROM alerts WHERE id = " + id);
 		rs.next();
 
-		assertEquals(15, rs.getTemperatureHigh());
-		assertEquals(25, rs.getTemperatureHalf());
-		assertEquals(27, rs.getTemperatureLow());
-		assertEquals(30, rs.getRainHigh());
-		assertEquals(1, rs.getRainHalf());
-		assertEquals(23, rs.getRainLow());;
+        assertEquals(15, rs.getInt("temperature_high"));
+        assertEquals(25, rs.getInt("temperature_half"));
+        assertEquals(27, rs.getInt("temperature_low"));
+        assertEquals(30, rs.getInt("rain_high"));
+        assertEquals(1, rs.getInt("rain_half"));
+        assertEquals(23, rs.getInt("rain_low"));;
 		assertEquals(id, rs.getInt("id"));
 	}
 
@@ -162,13 +161,13 @@ public class AlertsTest extends SQLBasedTest {
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, a -> {
-			Alerts al = a.find(Alerts.class, id);
+			Alert al = a.find(Alert.class, id);
 			a.remove(al);
 		});
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM Alerts WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM Alert WHERE id = " + id);
 		rs.next();
 
 		assertEquals(0, rs.getInt("total"));
