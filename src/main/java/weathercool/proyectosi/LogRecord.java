@@ -6,48 +6,55 @@ import javax.persistence.*;
 public class LogRecord {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 
-	private String table;
+	private String tableName;
 	private String action;
-	private String oldvalue;
-	
-	@ManyToMany
-	private User user = null;
-	
-	public int getId() {
+	private String raw;
+
+	public Integer getId() {
 		return id;
 	}
-
-	public String getTable() {
-		return this.table;
+	public void setId(Integer id) {
+		id = id;
 	}
-	public void setTable(String name) {
-		this.table = name;
+
+	public String getTableName() {
+		return this.tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 	public String getAction() {
 		return this.action;
 	}
-	public void setAction(String name) {
-		this.action = name;
+	public void setAction(String action) {
+		this.action = action;
 	}
 
-	public String getOldValue() {
-		return this.oldvalue;
+	public String getRaw() {
+		return this.raw;
 	}
-	public void setOldValue(String oldvalue) {
-		this.oldvalue = oldvalue;
+	public void setRaw(String raw) {
+		this.raw = raw;
 	}
+
+	@ManyToOne
+	private User user = null;
 
 	public User getUser() {
 		return this.user;
 	}
     public void setUser(User user) {
+        if (this.user != null) {
+            this.user.internalRemoveLogRecord(this);
+        }
+
         this.user = user;
-    }
-    public void internalSetUser(User user) {
-        user.internalAddLogRecord(this);
-        this.setUser(user);
+
+        if (this.user != null) {
+            this.user.internalAddLogRecord(this);
+        }
     }
 }
