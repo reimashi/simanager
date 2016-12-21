@@ -1,9 +1,8 @@
 package weathercool.proyectosi;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Time {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
