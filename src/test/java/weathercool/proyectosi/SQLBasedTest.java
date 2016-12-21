@@ -11,9 +11,9 @@ public class SQLBasedTest {
 	protected static Connection jdbcConnection;
 	
 	private static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://192.168.1.240:3306/work_si_tmp";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/si-database";
 	private static final String USER = "esei";
-	private static final String PASS = "qwer4321";
+	private static final String PASS = "eseipass";
 	
 	static {
 		try {
