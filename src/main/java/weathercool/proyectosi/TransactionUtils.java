@@ -20,6 +20,7 @@ public class TransactionUtils {
 			}
 		}finally{	em.close(); 	}
 	}
+
 	public static void doTransaction(EntityManager em, Transaction transaction) {
 		EntityTransaction tx = em.getTransaction();
 		try {

@@ -21,10 +21,6 @@
 			<property name="hibernate.format_sql" value="true" />
 			<property name="hibernate.use_sql_comments" value="true" />
 			<property name="hibernate.connection.autocommit" value="false" />
-
-			<!-- alternatively to <class> and <property> declarations, you can use 
-				a regular hibernate.cfg.xml file -->
-			<!-- property name="hibernate.ejb.cfgfile" value="/org/hibernate/ejb/test/hibernate.cfg.xml"/ -->
 		</properties>
 	</persistence-unit>
 </persistence>

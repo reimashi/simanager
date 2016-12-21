@@ -57,11 +57,18 @@ public class User {
     }
 
     public void addLogRecord(LogRecord p) {
-        this.logs.add(p);
+        p.setUser(this);
+    }
+
+    public void removeLogRecord(LogRecord p) {
+        p.setUser(null);
     }
 
     public void internalAddLogRecord(LogRecord p) {
-        p.internalSetUser(this);
-        this.addLogRecord(p);
+        this.logs.add(p);
+    }
+
+    public void internalRemoveLogRecord(LogRecord p) {
+        this.logs.remove(p);
     }
 }
