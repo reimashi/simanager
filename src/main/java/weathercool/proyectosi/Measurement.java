@@ -54,6 +54,17 @@ public class Measurement {
 	public double getElevation() {
 		return elevation;
 	}
+	
+	public int getAlert(){
+		return alert.getId();
+	}
+	
+	public int getLocation(){
+		return location.getId();
+	}
+	public int getTime(){
+		return time.getId();
+	}
 
 	public double getTemperatureSurface() {
 		return temperature_surface;
@@ -67,6 +78,14 @@ public class Measurement {
 	}
 	public double getTemperatureSeaLevel() {
 		return temperature_sea_level;
+	}
+	
+	public double getRain_pecipitation() {
+		return rain_pecipitation;
+	}
+
+	public void setRain_pecipitation(double rain_pecipitation) {
+		this.rain_pecipitation = rain_pecipitation;
 	}
 	
 	public double getCloudCoverHigh() {
@@ -119,6 +138,10 @@ public class Measurement {
 	
 	public double getSnowPrecipitation() {
 		return snow_precipitation;
+	}
+	
+	public double getRainPrecipitation() {
+		return rain_pecipitation;
 	}
 	
 	public double getHumidity() {

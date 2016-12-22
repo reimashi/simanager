@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static weathercool.proyectosi.TransactionUtils.doTransaction;
@@ -30,6 +31,9 @@ public class AlertTest extends SQLBasedTest {
 
 	@After
 	public void renewConnectionAfterTest() throws ClassNotFoundException, SQLException {
+        Statement statement = jdbcConnection.createStatement();
+        statement.execute("DELETE FROM alert");
+
 		super.renewConnection();
 	}
 
@@ -99,7 +103,7 @@ public class AlertTest extends SQLBasedTest {
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT * FROM alerts WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT * FROM alert WHERE id = " + id);
 		rs.next();
 
 		assertEquals(15, rs.getInt("temperature_high"));
@@ -140,7 +144,7 @@ public class AlertTest extends SQLBasedTest {
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT * FROM alerts WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT * FROM alert WHERE id = " + id);
 		rs.next();
 
         assertEquals(15, rs.getInt("temperature_high"));
@@ -171,6 +175,39 @@ public class AlertTest extends SQLBasedTest {
 		rs.next();
 
 		assertEquals(0, rs.getInt("total"));
+	}
+	
+	@Test
+	public void testListAlert() throws SQLException {
+		//prepare database for test
+		Statement statement = jdbcConnection.createStatement();
+		statement.executeUpdate(
+					"INSERT INTO alert(temperature_high, temperature_half, temperature_low, rain_high, rain_half, rain_low) values(15, 25, 27, 30, 1, 23)", 
+					Statement.RETURN_GENERATED_KEYS);
+		//prepare database for test
+		statement.executeUpdate(
+					"INSERT INTO alert(temperature_high, temperature_half, temperature_low, rain_high, rain_half, rain_low) values(10, 20, 25, 35, 3, 29)", 
+					Statement.RETURN_GENERATED_KEYS);
+		
+		List<Alert> alerts = emf.createEntityManager()
+			.createQuery("SELECT a FROM Alert a ORDER BY a.id", Alert.class)
+			.getResultList();
+		
+		//check
+		assertEquals(2, alerts.size());
+		
+		assertEquals(25, alerts.get(0).getTemperatureHalf());
+		assertEquals(27, alerts.get(0).getTemperatureLow());
+		assertEquals(30, alerts.get(0).getRainHigh());
+		assertEquals(1, alerts.get(0).getRainHalf());
+		assertEquals(23, alerts.get(0).getRainLow());
+		
+		assertEquals(10, alerts.get(1).getTemperatureHigh());
+		assertEquals(20, alerts.get(1).getTemperatureHalf());
+		assertEquals(25, alerts.get(1).getTemperatureLow());
+		assertEquals(35, alerts.get(1).getRainHigh());
+		assertEquals(3, alerts.get(1).getRainHalf());
+		assertEquals(29, alerts.get(1).getRainLow());
 	}
 
 }
