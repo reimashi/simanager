@@ -80,14 +80,10 @@ public class Measurement {
 		return temperature_sea_level;
 	}
 	
-	public double getRain_pecipitation() {
+	public double getRainPecipitation() {
 		return rain_pecipitation;
 	}
 
-	public void setRain_pecipitation(double rain_pecipitation) {
-		this.rain_pecipitation = rain_pecipitation;
-	}
-	
 	public double getCloudCoverHigh() {
 		return cloud_cover_high;
 	}
