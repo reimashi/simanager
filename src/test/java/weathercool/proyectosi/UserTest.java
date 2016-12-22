@@ -167,13 +167,13 @@ public class UserTest extends SQLBasedTest {
 			.createQuery("SELECT u FROM User u ORDER BY u.username", User.class)
 			.getResultList();
 
-        statement.execute("DELETE FROM user WHERE username = '" + test_username + "1" + "'");
-        statement.execute("DELETE FROM user WHERE username = '" + test_username + "2" + "'");
+        //statement.execute("DELETE FROM user WHERE username = '" + test_username + "1" + "'");
+        //statement.execute("DELETE FROM user WHERE username = '" + test_username + "2" + "'");
 		
 		//check (El usuario 0 es admin, creado por defecto)
-		assertEquals(3, users.size());
-		assertEquals(test_username + "1", users.get(1).getUsername());
-		assertEquals(test_username + "2", users.get(2).getUsername());
+		assertEquals(2, users.size());
+		assertEquals(test_username + "1", users.get(0).getUsername());
+		assertEquals(test_username + "2", users.get(1).getUsername());
 	}
 	
 }
