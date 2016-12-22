@@ -1,6 +1,7 @@
 package weathercool.proyectosi;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class LogRecord {
@@ -10,7 +11,8 @@ public class LogRecord {
 
 	private String tableName;
 	private String action;
-	private String raw;
+    private String raw;
+    private Date time;
 
 	public Integer getId() {
 		return id;
@@ -33,12 +35,19 @@ public class LogRecord {
 		this.action = action;
 	}
 
-	public String getRaw() {
-		return this.raw;
-	}
-	public void setRaw(String raw) {
-		this.raw = raw;
-	}
+    public String getRaw() {
+        return this.raw;
+    }
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
+
+    public Date getTime() {
+        return this.time;
+    }
+    public void setTime(Date time) {
+        this.time = time;
+    }
 
 	@ManyToOne
 	private User user = null;
