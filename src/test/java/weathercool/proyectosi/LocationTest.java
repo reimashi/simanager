@@ -31,6 +31,9 @@ public class LocationTest extends SQLBasedTest {
 
 	@After
 	public void renewConnectionAfterTest() throws ClassNotFoundException, SQLException {
+        Statement statement = jdbcConnection.createStatement();
+        statement.execute("DELETE FROM location");
+
 		super.renewConnection();
 	}
 
@@ -90,8 +93,8 @@ public class LocationTest extends SQLBasedTest {
 		ResultSet rs = statement.executeQuery("SELECT * FROM location WHERE id = " + id);
 		rs.next();
 
-		assertEquals(-5.132, rs.getDouble("latitude"), 1e-10);
-		assertEquals(-6.189, rs.getDouble("longitude"), 1e-10);
+		assertEquals(-6.132, rs.getDouble("latitude"), 1e-10);
+		assertEquals(-5.198, rs.getDouble("longitude"), 1e-10);
 		assertEquals(id, rs.getInt("id"));
 	}
 
@@ -159,7 +162,7 @@ public class LocationTest extends SQLBasedTest {
 				Statement.RETURN_GENERATED_KEYS);
 
 		List<Location> Locations = emf.createEntityManager()
-				.createQuery("SELECT l FROM location l ORDER BY l.id", Location.class).getResultList();
+				.createQuery("SELECT l FROM Location l ORDER BY l.id", Location.class).getResultList();
 
 		// check
 		assertEquals(2, Locations.size());

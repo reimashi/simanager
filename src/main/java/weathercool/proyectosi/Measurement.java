@@ -250,6 +250,34 @@ public class Measurement {
 			this.time = time;
 			this.location = location;
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + alert;
+			result = prime * result + location;
+			result = prime * result + time;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			MeasurementKey other = (MeasurementKey) obj;
+			if (alert != other.alert)
+				return false;
+			if (location != other.location)
+				return false;
+			if (time != other.time)
+				return false;
+			return true;
+		}
 	}
 	
 }

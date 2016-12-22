@@ -31,8 +31,13 @@ public class TimeTest extends SQLBasedTest {
 
 	@After
 	public void renewConnectionAfterTest() throws ClassNotFoundException, SQLException {
+        Statement statement = jdbcConnection.createStatement();
+        statement.execute("DELETE FROM time");
+
 		super.renewConnection();
 	}
+	
+	
 
 	@Test
 	public void testCreateTime() throws SQLException {
@@ -91,10 +96,10 @@ public class TimeTest extends SQLBasedTest {
 			Time tim = ti.find(Time.class, id);		
 			tim.setYear(2016);
 			tim.setMonth(11);
-			tim.setDay(24);
-			tim.setHour(13);
-			tim.setMinute(06);
-			tim.setSecond(14);
+			tim.setDay(20);
+			tim.setHour(17);
+			tim.setMinute(55);
+			tim.setSecond(38);
 		});
 
 		// check
@@ -128,10 +133,10 @@ public class TimeTest extends SQLBasedTest {
 		// doTransaction)
 		aDetachedTime.setYear(2016);
 		aDetachedTime.setMonth(11);
-		aDetachedTime.setDay(24);
-		aDetachedTime.setHour(13);
-		aDetachedTime.setMinute(06);
-		aDetachedTime.setSecond(14);
+		aDetachedTime.setDay(20);
+		aDetachedTime.setHour(17);
+		aDetachedTime.setMinute(55);
+		aDetachedTime.setSecond(38);
 
 		doTransaction(emf, em -> {
 			em.merge(aDetachedTime);
@@ -183,8 +188,8 @@ public class TimeTest extends SQLBasedTest {
 				Statement.RETURN_GENERATED_KEYS);
 
 		List<Time> Times = emf.createEntityManager()
-				.createQuery("SELECT t FROM time t ORDER BY t.id", Time.class).getResultList();
-
+				.createQuery("SELECT t FROM Time t ORDER BY t.id", Time.class).getResultList();
+		System.out.println(Times);
 		// check
 		assertEquals(2, Times.size());
 		assertEquals(2016, Times.get(0).getYear());
