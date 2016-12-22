@@ -6,6 +6,7 @@
 		<class>weathercool.proyectosi.User</class>
 		<class>weathercool.proyectosi.LogRecord</class>
 		<class>weathercool.proyectosi.Location</class>
+		<class>weathercool.proyectosi.LocationClass</class>
 		<class>weathercool.proyectosi.Time</class>
 		<class>weathercool.proyectosi.Alert</class>
 		<class>weathercool.proyectosi.Measurement</class>
