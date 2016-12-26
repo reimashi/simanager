@@ -65,4 +65,8 @@ public class Time {
 	public void setSecond(int second) {
 		this.second = second;
 	}
+
+	public String getToString(){
+		return "" + this.hour + ":" + this.minute + ":" + this.second + " - " + this.day + "/" + this.day + "/" + this.year;
+	}
 }

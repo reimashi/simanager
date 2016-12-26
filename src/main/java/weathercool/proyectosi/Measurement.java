@@ -271,6 +271,10 @@ public class Measurement {
 		this.location = l;
 	}
 
+	public String getToString(){
+		return "Tiempo: " + this.time.getHour() + ":" + this.time.getMinute() + ":" + this.time.getSecond() + " - " + this.time.getDay() + "/" + this.time.getMonth() + "/" + this.time.getYear() + " / Localización: " + this.location.getLatitude() + " , " + this.location.getLongitude();
+	}
+
 	
 	public static class MeasurementKey
 		implements Serializable {

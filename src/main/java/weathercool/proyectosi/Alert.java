@@ -66,5 +66,9 @@ public class Alert {
 	public void setRainLow(int rain_low) {
 		this.rain_low = rain_low;
 	}
+
+	public String getToString(){
+		return "ID: " + this.id;
+	}
 	
 }

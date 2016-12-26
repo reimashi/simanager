@@ -80,29 +80,4 @@ public class LogRecordTest extends SQLBasedTest {
 		
 		assertEquals(d.getUser().getUsername(), test_username);
 	}
-	
-	private LogRecord detachedLogRecord = null;
-	
-	@Test(expected=LazyInitializationException.class)
-	public void testLazyInitializationException() throws SQLException {
-		Statement statement = jdbcConnection.createStatement();
-
-        statement = jdbcConnection.createStatement();
-
-        statement.executeUpdate(
-				"INSERT INTO LogRecord(tableName, user_username, action) values ('time', '" + test_username + "', 'delete')",
-                Statement.RETURN_GENERATED_KEYS);
-        int logId = getLastInsertedId(statement);
-
-        statement = jdbcConnection.createStatement();
-        statement.executeUpdate(
-				"INSERT INTO LogRecord(tableName, user_username, action) values ('time', '" + test_username + "', 'insert')",
-                Statement.RETURN_GENERATED_KEYS);
-		
-		doTransaction(emf, em -> {
-			detachedLogRecord = em.find(LogRecord.class, logId);
-		});
-
-        assertEquals(detachedLogRecord.getUser().getUsername(), test_username);
-	}
 }

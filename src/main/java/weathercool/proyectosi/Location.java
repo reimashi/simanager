@@ -32,4 +32,8 @@ public class Location {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
+
+	public String getToString(){
+		return "" + this.latitude + ", " + this.longitude;
+	}
 }
