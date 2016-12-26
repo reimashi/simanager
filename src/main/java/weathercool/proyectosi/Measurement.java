@@ -55,15 +55,15 @@ public class Measurement {
 		return elevation;
 	}
 	
-	public int getAlert(){
-		return alert.getId();
+	public Alert getAlert(){
+		return alert;
 	}
 	
-	public int getLocation(){
-		return location.getId();
+	public Location getLocation(){
+		return location;
 	}
-	public int getTime(){
-		return time.getId();
+	public Time getTime(){
+		return time;
 	}
 
 	public double getTemperatureSurface() {
@@ -78,10 +78,6 @@ public class Measurement {
 	}
 	public double getTemperatureSeaLevel() {
 		return temperature_sea_level;
-	}
-	
-	public double getRainPecipitation() {
-		return rain_pecipitation;
 	}
 
 	public double getCloudCoverHigh() {
@@ -242,6 +238,10 @@ public class Measurement {
 		this.wind_lon=wind_lon;
 	}
 	
+	public void setRainPrecipitation(double rain_pecipitation) {
+		this.rain_pecipitation=rain_pecipitation;
+	}
+
 	public void setWindLat(double wind_lat) {
 		this.wind_lat=wind_lat;
 	}
@@ -249,6 +249,28 @@ public class Measurement {
 	public void setWindGust(double wind_gust) {
 		this.wind_gust=wind_gust;
 	}
+
+	public void setTime(Time t){
+		if(this.time != null){
+			this.time = null;
+		}
+		this.time = t;
+	}
+
+	public void setAlert(Alert a){
+		if(this.alert != null){
+			this.alert = null;
+		}
+		this.alert = a;
+	}
+
+	public void setLocation(Location l){
+		if(this.location != null){
+			this.location = null;
+		}
+		this.location = l;
+	}
+
 	
 	public static class MeasurementKey
 		implements Serializable {
