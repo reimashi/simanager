@@ -16,7 +16,7 @@ public class Measurement {
 	
 	@Id
 	@ManyToOne
-	private Location location;
+	private LocationClass location;
 	
 	/*@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,7 +59,7 @@ public class Measurement {
 		return alert;
 	}
 	
-	public Location getLocation(){
+	public LocationClass getLocation(){
 		return location;
 	}
 	public Time getTime(){
@@ -264,7 +264,7 @@ public class Measurement {
 		this.alert = a;
 	}
 
-	public void setLocation(Location l){
+	public void setLocation(LocationClass l){
 		if(this.location != null){
 			this.location = null;
 		}

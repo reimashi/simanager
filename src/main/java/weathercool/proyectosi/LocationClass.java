@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * La clase se llama LocationClass en lugar de Location por un problema de hibernate con una palabra reservada.
+ */
 @Entity
 public class LocationClass {
 	@Id

@@ -59,7 +59,7 @@ public class MeasurementTest extends SQLBasedTest {
 		
 	
 		EntityManager em = emf.createEntityManager();
-		Location l = em.find(Location.class, locId);
+		LocationClass l = em.find(LocationClass.class, locId);
 		
 		List<Measurement> measures = em.createQuery("SELECT m "
 				+ "FROM Measurement m WHERE location_id = :l", Measurement.class)

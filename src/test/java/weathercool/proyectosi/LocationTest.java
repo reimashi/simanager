@@ -32,14 +32,14 @@ public class LocationTest extends SQLBasedTest {
 	@After
 	public void renewConnectionAfterTest() throws ClassNotFoundException, SQLException {
         Statement statement = jdbcConnection.createStatement();
-        statement.execute("DELETE FROM location");
+        statement.execute("DELETE FROM LocationClass");
 
 		super.renewConnection();
 	}
 
 	@Test
 	public void testCreateLocation() throws SQLException {
-		final Location loc = new Location();
+		final LocationClass loc = new LocationClass();
 
 		doTransaction(emf, lo -> {
 			loc.setLatitude(9.45);
@@ -48,7 +48,7 @@ public class LocationTest extends SQLBasedTest {
 		});
 		// check
 		Statement statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT COUNT(*) AS Total FROM location WHERE id = " + loc.getId());
+		ResultSet rs = statement.executeQuery("SELECT COUNT(*) AS Total FROM LocationClass WHERE id = " + loc.getId());
 		rs.next();
 
 		assertEquals(1, rs.getInt("total"));
@@ -58,13 +58,13 @@ public class LocationTest extends SQLBasedTest {
 	public void testFindById() throws SQLException {
 		// prepare database for test
 		Statement statement = jdbcConnection.createStatement();
-		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(94.132, 45.189)",
+		statement.executeUpdate("INSERT INTO LocationClass(latitude, longitude) values(94.132, 45.189)",
 				Statement.RETURN_GENERATED_KEYS);
 
 		int id = getLastInsertedId(statement);
 
 		// test code
-		Location lo = emf.createEntityManager().find(Location.class, id);
+		LocationClass lo = emf.createEntityManager().find(LocationClass.class, id);
 
 		// assert code
 		System.out.println("Location of id " + id + " is: " + lo);
@@ -77,20 +77,20 @@ public class LocationTest extends SQLBasedTest {
 	public void testUpdateLocation() throws SQLException {
 		// prepare database for test
 		Statement statement = jdbcConnection.createStatement();
-		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(-94.132, -45.189)",
+		statement.executeUpdate("INSERT INTO LocationClass(latitude, longitude) values(-94.132, -45.189)",
 				Statement.RETURN_GENERATED_KEYS);
 
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, lo -> {
-			Location l = lo.find(Location.class, id);
+			LocationClass l = lo.find(LocationClass.class, id);
 			l.setLatitude(-6.132);
 			l.setLongitude(-5.198);
 		});
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT * FROM location WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT * FROM LocationClass WHERE id = " + id);
 		rs.next();
 
 		assertEquals(-6.132, rs.getDouble("latitude"), 1e-10);
@@ -98,18 +98,18 @@ public class LocationTest extends SQLBasedTest {
 		assertEquals(id, rs.getInt("id"));
 	}
 
-	private Location aDetachedLocation = null;
+	private LocationClass aDetachedLocation = null;
 
 	@Test
 	public void testUpdateLocationByMerge() throws SQLException {
 		// prepare database for test
 		Statement statement = jdbcConnection.createStatement();
-		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(-94.132, -45.189)",
+		statement.executeUpdate("INSERT INTO LocationClass(latitude, longitude) values(-94.132, -45.189)",
 				Statement.RETURN_GENERATED_KEYS);
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, lo -> {
-			aDetachedLocation = lo.find(Location.class, id);
+			aDetachedLocation = lo.find(LocationClass.class, id);
 		});
 		// e is detached, because the entitymanager lo is closed (see
 		// doTransaction)
@@ -122,7 +122,7 @@ public class LocationTest extends SQLBasedTest {
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT * FROM location WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT * FROM LocationClass WHERE id = " + id);
 		rs.next();
 
 		assertEquals(-0.132, rs.getDouble("latitude"), 1e-10);
@@ -134,18 +134,18 @@ public class LocationTest extends SQLBasedTest {
 	public void testDeleteLocation() throws SQLException {
 		// prepare database for test
 		Statement statement = jdbcConnection.createStatement();
-		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(94.132, 45.189)",
+		statement.executeUpdate("INSERT INTO LocationClass(latitude, longitude) values(94.132, 45.189)",
 				Statement.RETURN_GENERATED_KEYS);
 		int id = getLastInsertedId(statement);
 
 		doTransaction(emf, lo -> {
-			Location l = lo.find(Location.class, id);
+			LocationClass l = lo.find(LocationClass.class, id);
 			lo.remove(l);
 		});
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM location WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM LocationClass WHERE id = " + id);
 		rs.next();
 
 		assertEquals(0, rs.getInt("total"));
@@ -155,14 +155,14 @@ public class LocationTest extends SQLBasedTest {
 	public void testListLocation() throws SQLException {
 		// prepare database for test
 		Statement statement = jdbcConnection.createStatement();
-		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(4.524, 7.785)",
+		statement.executeUpdate("INSERT INTO LocationClass(latitude, longitude) values(4.524, 7.785)",
 				Statement.RETURN_GENERATED_KEYS);
 		// prepare database for test
-		statement.executeUpdate("INSERT INTO location(latitude, longitude) values(8.456, 1.288)",
+		statement.executeUpdate("INSERT INTO LocationClass(latitude, longitude) values(8.456, 1.288)",
 				Statement.RETURN_GENERATED_KEYS);
 
-		List<Location> Locations = emf.createEntityManager()
-				.createQuery("SELECT l FROM Location l ORDER BY l.id", Location.class).getResultList();
+		List<LocationClass> Locations = emf.createEntityManager()
+				.createQuery("SELECT l FROM LocationClass l ORDER BY l.id", LocationClass.class).getResultList();
 
 		// check
 		assertEquals(2, Locations.size());

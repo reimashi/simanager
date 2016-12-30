@@ -80,4 +80,25 @@ public class LogRecordTest extends SQLBasedTest {
 		
 		assertEquals(d.getUser().getUsername(), test_username);
 	}
+
+	@Test
+	public void testDeleteLogRecord() throws SQLException {
+		// prepare database for test
+		Statement statement = jdbcConnection.createStatement();
+		statement.executeUpdate("INSERT INTO LogRecord(tableName, user_username, action) values ('time', '" + test_username + "', 'delete')",
+				Statement.RETURN_GENERATED_KEYS);
+		int id = getLastInsertedId(statement);
+
+		doTransaction(emf, lo -> {
+			LogRecord l = lo.find(LogRecord.class, id);
+			lo.remove(l);
+		});
+
+		// check
+		statement = jdbcConnection.createStatement();
+		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM LogRecord WHERE id = " + id);
+		rs.next();
+
+		assertEquals(0, rs.getInt("total"));
+	}
 }
