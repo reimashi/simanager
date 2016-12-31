@@ -65,7 +65,7 @@ public class MeasurementTest extends SQLBasedTest {
 		int timeId = getLastInsertedId(statement);
 		
 		statement.executeUpdate(
-				"INSERT INTO Measurement(id_alert, id_location, id_time, elevation, temperature_surface, temperature_500mb,"
+				"INSERT INTO Measurement(alert_id, location_id, time_id, elevation, temperature_surface, temperature_500mb,"
 				+ "temperature_850mb, temperature_sea_level, cloud_cover_high, cloud_cover_half, cloud_cover_low,"
 				+ "visibility, salinity, water_speed_eastward, water_speed_northward, wave_direction_mean,wave_period_absolute, wave_period_peak, wave_direction_peak,"
 				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
@@ -102,7 +102,7 @@ public class MeasurementTest extends SQLBasedTest {
 		
 		statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO Measurement(id_alert, id_location, id_time, elevation, temperature_surface, temperature_500mb,"
+				"INSERT INTO Measurement(alert_id, location_id, time_id, elevation, temperature_surface, temperature_500mb,"
 				+ "temperature_850mb, temperature_sea_level, cloud_cover_high, cloud_cover_half, cloud_cover_low,"
 				+ "visibility, salinity, water_speed_eastward, water_speed_northward, wave_direction_mean,wave_period_absolute, wave_period_peak, wave_direction_peak,"
 				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
@@ -145,7 +145,7 @@ public class MeasurementTest extends SQLBasedTest {
 		
 		statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO Measurement(id_alert, id_location, id_time, elevation, temperature_surface, temperature_500mb,"
+				"INSERT INTO Measurement(alert_id, location_id, time_id, elevation, temperature_surface, temperature_500mb,"
 				+ "temperature_850mb, temperature_sea_level, cloud_cover_high, cloud_cover_half, cloud_cover_low,"
 				+ "visibility, salinity, water_speed_eastward, water_speed_northward, wave_direction_mean,wave_period_absolute, wave_period_peak, wave_direction_peak,"
 				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
@@ -190,7 +190,7 @@ public class MeasurementTest extends SQLBasedTest {
 		
 		statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO Measurement(id_alert, id_location, id_time, elevation, temperature_surface, temperature_500mb,"
+				"INSERT INTO Measurement(alert_id, location_id, time_id, elevation, temperature_surface, temperature_500mb,"
 				+ "temperature_850mb, temperature_sea_level, cloud_cover_high, cloud_cover_half, cloud_cover_low,"
 				+ "visibility, salinity, water_speed_eastward, water_speed_northward, wave_direction_mean,wave_period_absolute, wave_period_peak, wave_direction_peak,"
 				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
