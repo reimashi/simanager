@@ -120,7 +120,7 @@ public class MeasurementTest extends SQLBasedTest {
 		
 		//check
 		assertEquals(1, measures.size());
-		assertEquals(alertId, measures.get(0).getAlert());
+		assertEquals(alertId, measures.get(0).getAlert().getId());
 	}
 	
 	@Test
@@ -206,9 +206,9 @@ public class MeasurementTest extends SQLBasedTest {
 
 		//check
 		assertEquals(1, measures.size());
-		assertEquals(alertId, measures.get(0).getAlert());
-		assertEquals(timeId, measures.get(1).getAlert());
-		assertEquals(locId, measures.get(2).getAlert());
+		assertEquals(alertId, measures.get(0).getAlert().getId());
+		assertEquals(timeId, measures.get(0).getTime().getId());
+		assertEquals(locId, measures.get(0).getLocation().getId());
 		
 	}
 	@Test
@@ -252,9 +252,9 @@ public class MeasurementTest extends SQLBasedTest {
 
 		//check
 		assertEquals(1, measures.size());
-		assertEquals(alertId, measures.get(0).getAlert());
-		assertEquals(timeId, measures.get(1).getAlert());
-		assertEquals(locId, measures.get(2).getAlert());
+		assertEquals(alertId, measures.get(0).getAlert().getId());
+		assertEquals(timeId, measures.get(0).getTime().getId());
+		assertEquals(locId, measures.get(0).getLocation().getId());
 		
 	}
 }
