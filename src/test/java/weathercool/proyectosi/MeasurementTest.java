@@ -36,7 +36,7 @@ public class MeasurementTest extends SQLBasedTest {
 	@After
 	public void renewConnectionAfterTest() throws ClassNotFoundException, SQLException {
         Statement statement = jdbcConnection.createStatement();
-        statement.execute("DELETE FROM alert");
+        statement.execute("DELETE FROM Measurement");
 
 		super.renewConnection();
 	}
@@ -46,7 +46,7 @@ public class MeasurementTest extends SQLBasedTest {
 
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO location(latitude, longitude) values(94.132, 45.189)", 
+				"INSERT INTO locationClass(latitude, longitude) values(94.132, 45.189)", 
 				Statement.RETURN_GENERATED_KEYS);
 		int locId = getLastInsertedId(statement);
 		
@@ -71,6 +71,7 @@ public class MeasurementTest extends SQLBasedTest {
 				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
 				+ "values("+alertId+","+locId+","+timeId+",0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)", 
 				Statement.RETURN_GENERATED_KEYS);
+		
 		// check
 		Statement statement2 = jdbcConnection.createStatement();
 		ResultSet rs = statement2.executeQuery("SELECT COUNT(*) AS Total FROM Measurement WHERE alert_id = "+ alertId);
@@ -80,10 +81,10 @@ public class MeasurementTest extends SQLBasedTest {
 	}
 	
 	@Test
-	public void testFindMeasures() throws SQLException {
+	public void testFindMeasuresOfLocation() throws SQLException {
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO location(latitude, longitude) values(94.132, 45.189)", 
+				"INSERT INTO locationClass(latitude, longitude) values(94.132, 45.189)", 
 				Statement.RETURN_GENERATED_KEYS);
 		int locId = getLastInsertedId(statement);
 		statement = jdbcConnection.createStatement();
@@ -126,7 +127,7 @@ public class MeasurementTest extends SQLBasedTest {
 	public void testDeleteMeasure() throws SQLException {
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO location(latitude, longitude) values(94.132, 45.189)", 
+				"INSERT INTO locationClass(latitude, longitude) values(94.132, 45.189)", 
 				Statement.RETURN_GENERATED_KEYS);
 		int locId = getLastInsertedId(statement);
 		statement = jdbcConnection.createStatement();
@@ -151,27 +152,25 @@ public class MeasurementTest extends SQLBasedTest {
 				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
 				+ "values("+alertId+","+locId+","+timeId+",0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)", 
 				Statement.RETURN_GENERATED_KEYS);
-		int id = getLastInsertedId(statement);
+	
 
-		doTransaction(emf, me -> {
-			Measurement m = me.find(Measurement.class, id);
-			me.remove(m);
-		});
+		statement = jdbcConnection.createStatement();
+        statement.execute("DELETE FROM Measurement WHERE alert_id= "+ alertId +" & location_id="+ locId+" & time_id = "+ timeId);
 
 		// check
 		statement = jdbcConnection.createStatement();
-		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM Measurement WHERE id = " + id);
+		ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM Measurement WHERE alert_id= "+ alertId +" & location_id="+ locId+" & time_id = "+ timeId);
 		rs.next();
 
 		assertEquals(0, rs.getInt("total"));
 	}
 	
 	@Test
-	public void testFindById() throws SQLException {
+	public void testFindMeasuresOfAlert() throws SQLException {
 		// prepare database for test
 		Statement statement = jdbcConnection.createStatement();
 		statement.executeUpdate(
-				"INSERT INTO location(latitude, longitude) values(94.132, 45.189)", 
+				"INSERT INTO locationClass(latitude, longitude) values(94.132, 45.189)", 
 				Statement.RETURN_GENERATED_KEYS);
 		int locId = getLastInsertedId(statement);
 		statement = jdbcConnection.createStatement();
@@ -188,8 +187,8 @@ public class MeasurementTest extends SQLBasedTest {
 
 		int timeId = getLastInsertedId(statement);
 		
-		statement = jdbcConnection.createStatement();
-		statement.executeUpdate(
+		Statement statement2 = jdbcConnection.createStatement();
+		statement2.executeUpdate(
 				"INSERT INTO Measurement(alert_id, location_id, time_id, elevation, temperature_surface, temperature_500mb,"
 				+ "temperature_850mb, temperature_sea_level, cloud_cover_high, cloud_cover_half, cloud_cover_low,"
 				+ "visibility, salinity, water_speed_eastward, water_speed_northward, wave_direction_mean,wave_period_absolute, wave_period_peak, wave_direction_peak,"
@@ -197,37 +196,65 @@ public class MeasurementTest extends SQLBasedTest {
 				+ "values("+alertId+","+locId+","+timeId+",0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)", 
 				Statement.RETURN_GENERATED_KEYS);
 
-		int id = getLastInsertedId(statement);
 
-		// test code
 		EntityManager em = emf.createEntityManager();
-		Measurement me = em.find(Measurement.class, id);
+		Alert a = em.find(Alert.class, alertId);
+		
+		List<Measurement> measures = em.createQuery("SELECT m "
+				+ "FROM Measurement m WHERE alert_id = :a", Measurement.class)
+		.setParameter("a", a).getResultList();
 
-		// assert code
-		assertEquals(0, me.getElevation(), 1e-10);
-		assertEquals(20, me.getTemperatureSurface(), 1e-10);
-		assertEquals(0, me.getTemperature500mb(), 1e-10);
-		assertEquals(0, me.getTemperature850mb(), 1e-10);
-		assertEquals(0, me.getTemperatureSeaLevel(), 1e-10);
-		assertEquals(0, me.getCloudCoverHigh(), 1e-10);
-		assertEquals(0, me.getCloudCoverHalf(), 1e-10);
-		assertEquals(0, me.getCloudCoverLow(), 1e-10);
-		assertEquals(0, me.getVisibility(), 1e-10);
-		assertEquals(0, me.getSalinity(), 1e-10);
-		assertEquals(0, me.getWaterSpeedEastward(), 1e-10);
-		assertEquals(0, me.getWaterSpeedNorthward(), 1e-10);
-		assertEquals(0, me.getWaterDirectionMean(), 1e-10);
-		assertEquals(0, me.getWaterDirectionPeak(), 1e-10);
-		assertEquals(0, me.getWaterPeriodAbsolute(), 1e-10);
-		assertEquals(0, me.getWaterPeriodPeak(), 1e-10);
-		assertEquals(0, me.getSnowLevel(), 1e-10);
-		assertEquals(0, me.getSnowPrecipitation(), 1e-10);
-		assertEquals(0, me.getRainPrecipitation(), 1e-10);
-		assertEquals(0, me.getHumidity(), 1e-10);
-		assertEquals(0, me.getWindDirection(), 1e-10);
-		assertEquals(0, me.getWindLon(), 1e-10);
-		assertEquals(0, me.getWindLat(), 1e-10);
-		assertEquals(0, me.getWindGust(), 1e-10);
+		//check
+		assertEquals(1, measures.size());
+		assertEquals(alertId, measures.get(0).getAlert());
+		assertEquals(timeId, measures.get(1).getAlert());
+		assertEquals(locId, measures.get(2).getAlert());
+		
+	}
+	@Test
+	public void testFindMeasuresOfTime() throws SQLException {
+		// prepare database for test
+		Statement statement = jdbcConnection.createStatement();
+		statement.executeUpdate(
+				"INSERT INTO locationClass(latitude, longitude) values(94.132, 45.189)", 
+				Statement.RETURN_GENERATED_KEYS);
+		int locId = getLastInsertedId(statement);
+		statement = jdbcConnection.createStatement();
+		statement.executeUpdate(
+				"INSERT INTO alert(temperature_high, temperature_half, temperature_low, rain_high, rain_half, rain_low) values(15, 25, 27, 30, 1, 23)",
+				Statement.RETURN_GENERATED_KEYS);
+
+		int alertId = getLastInsertedId(statement);
+		
+		statement = jdbcConnection.createStatement();
+		statement.executeUpdate(
+				"INSERT INTO time(year, month, day, hour, minute, second) values(2016, 11, 20, 17, 55, 38)", 
+				Statement.RETURN_GENERATED_KEYS);
+
+		int timeId = getLastInsertedId(statement);
+		
+		Statement statement2 = jdbcConnection.createStatement();
+		statement2.executeUpdate(
+				"INSERT INTO Measurement(alert_id, location_id, time_id, elevation, temperature_surface, temperature_500mb,"
+				+ "temperature_850mb, temperature_sea_level, cloud_cover_high, cloud_cover_half, cloud_cover_low,"
+				+ "visibility, salinity, water_speed_eastward, water_speed_northward, wave_direction_mean,wave_period_absolute, wave_period_peak, wave_direction_peak,"
+				+ "snow_level, snow_precipitation, rain_pecipitation, humidity, wind_direction, wind_lon, wind_lat, wind_gust) "
+				+ "values("+alertId+","+locId+","+timeId+",0,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)", 
+				Statement.RETURN_GENERATED_KEYS);
+
+
+		EntityManager em = emf.createEntityManager();
+		Time t = em.find(Time.class, timeId);
+		
+		List<Measurement> measures = em.createQuery("SELECT m "
+				+ "FROM Measurement m WHERE time_id = :t", Measurement.class)
+		.setParameter("t", t).getResultList();
+
+		//check
+		assertEquals(1, measures.size());
+		assertEquals(alertId, measures.get(0).getAlert());
+		assertEquals(timeId, measures.get(1).getAlert());
+		assertEquals(locId, measures.get(2).getAlert());
 		
 	}
 }
